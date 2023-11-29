@@ -43,8 +43,6 @@ DESIRED_ORDER = [
     'Number_of_adults_65+'
 ]
 
-# Cache function to calculate metrics
-@st.cache
 def calculate_metrics(df):
     """Calculate unique household and person counts."""
     unique_households_df = df.drop_duplicates(subset='Household_ID')
@@ -52,23 +50,42 @@ def calculate_metrics(df):
     num_person = len(df)
     return num_household, num_person
 
-# Function to sort data
 def sort_data(data_dict):
     """Sort a dictionary by its values in descending order."""
     return dict(sorted(data_dict.items(), key=lambda x: x[1], reverse=True))
 
-# Function to create bar charts
 def create_bar_chart(data, title, x_label, y_label, height=560):
     """Create a bar chart from the provided data."""
     df = pd.DataFrame(list(data.items()), columns=[x_label, y_label])
     fig = px.bar(df, x=x_label, y=y_label, title=title, labels={'x': x_label, 'y': y_label}, height=height)
     return fig
 
-def update_plot_layout(fig, tickvals, ticktext):
-    """Update plot layout with custom settings."""
+def update_plot_layout(fig, tickvals, ticktext, bottom_margin=100, figure_width=800, figure_height=560):
+    """Update plot layout with custom settings, fixed bottom margin, and dynamic bar sizes."""
     custom_palette = ['#00629b', '#008bb2', '#004d70', '#08a88d', '#2cbba9', '#067066']
-    fig.update_xaxes(tickvals=tickvals, ticktext=list(ticktext.keys()))
-    fig.update_yaxes(showticklabels=False)
-    fig.update_layout(template="plotly_white")
-    fig.update_traces(text=list(ticktext.values()), texttemplate='%{text}', textposition='outside', marker_color=custom_palette[:len(ticktext)])
+    
+    # Calculate dynamic bar width based on number of categories
+    num_categories = len(ticktext)
+    max_bar_width = 0.8  # Adjust this as necessary
+    dynamic_bar_width = max_bar_width / max(1, num_categories / 10)  # Example heuristic for bar width
+    
+    fig.update_xaxes(tickvals=tickvals, ticktext=list(ticktext.keys()), tickangle=45)
+    fig.update_yaxes(showgrid=True)
+    fig.update_layout(
+        template="plotly_white",
+        font=dict(size=12),
+        margin=dict(l=50, r=50, t=50, b=220),
+        xaxis_fixedrange=True,
+        width=figure_width,
+        height=figure_height,
+    )
+    fig.update_traces(
+        text=list(ticktext.values()),
+        texttemplate='%{text}',
+        textposition='outside',
+        marker_color=custom_palette[:len(ticktext)],
+        textfont_size=12,
+        width=dynamic_bar_width  # Use dynamic bar width
+    )
     return fig
+

@@ -223,7 +223,7 @@ def main():
                                 chronic_condition_chart = update_plot_layout(chronic_condition_chart, list(range(len(CHRONIC_CONDITION_KEYS))), sorted_chronic_condition_data)
                                 col2.plotly_chart(chronic_condition_chart, use_container_width=True)
                         else:
-                                st.write("No data available.")
+                                st.write("No data available with these filters.")
 
                 else:
                         st.text("No data available. Please upload data.")
