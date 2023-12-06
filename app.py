@@ -168,28 +168,28 @@ def main():
                         col2.metric("Total Number of Clients", num_person)
                         style_metric_cards(border_left_color='#00629b')
 
-                        #gender chart
                         summary = calculate_summary_stats(filtered_df)
                         if not filtered_df.empty:
                                 col1, col2 = st.columns(2)
+
                                 # household chart
                                 household_data = {key: summary[key] for key in HOUSEHOLD_KEYS if summary[key] > 0}
                                 sorted_household_data = sort_data(household_data)
-                                household_chart = create_bar_chart(sorted_household_data, 'Number of Households by Household Type', 'Household Type', 'Count')
+                                household_chart = create_bar_chart(sorted_household_data, 'Number of Households by Household Type', 'Household Type', 'Households Count')
                                 household_chart = update_plot_layout(household_chart, list(range(len(HOUSEHOLD_KEYS))), sorted_household_data)
                                 col1.plotly_chart(household_chart, use_container_width=True)
 
                                 #gender chart
                                 gender_data = {key: summary[key] for key in GENDER_KEYS if summary[key] > 0}
                                 sorted_gender_data = sort_data(gender_data)
-                                gender_chart = create_bar_chart(sorted_gender_data, 'Gender Distribution', 'Gender Identity', 'Count')
+                                gender_chart = create_bar_chart(sorted_gender_data, 'Gender Distribution', 'Gender Identity', 'Clients Count')
                                 gender_chart = update_plot_layout(gender_chart, list(range(len(GENDER_KEYS))), sorted_gender_data)
                                 col1.plotly_chart(gender_chart, use_container_width=True)
 
                                 # Race/Ethnicity data chart
                                 race_ethnicity_data = {key: summary[key] for key in RACE_ETHNICITY_KEYS if summary[key] > 0}
                                 sorted_race_ethnicity_data = sort_data(race_ethnicity_data)
-                                race_ethnicity_chart = create_bar_chart(sorted_race_ethnicity_data, 'Race/Ethnicity Distribution', 'Race/Ethnicity', 'Count')
+                                race_ethnicity_chart = create_bar_chart(sorted_race_ethnicity_data, 'Race/Ethnicity Distribution', 'Race/Ethnicity', 'Clients Count')
                                 race_ethnicity_chart = update_plot_layout(race_ethnicity_chart, list(range(len(RACE_ETHNICITY_KEYS))), sorted_race_ethnicity_data)
                                 col2.plotly_chart(race_ethnicity_chart, use_container_width=True)
 
@@ -212,14 +212,14 @@ def main():
                                 # Age groups data chart
                                 age_groups_data = {key: summary[key] for key in AGE_GROUPS_KEYS if summary[key] > 0}
                                 sorted_age_groups_data = {key: age_groups_data[key] for key in DESIRED_ORDER if key in age_groups_data}
-                                age_groups_chart = create_bar_chart(sorted_age_groups_data, 'Age Groups Distribution', 'Age Group', 'Count')
+                                age_groups_chart = create_bar_chart(sorted_age_groups_data, 'Age Groups Distribution', 'Age Group', 'Clients Count')
                                 age_groups_chart = update_plot_layout(age_groups_chart, list(range(len(sorted_age_groups_data))), sorted_age_groups_data)
                                 col1.plotly_chart(age_groups_chart, use_container_width=True)
 
                                 # Chronic condition data chart
                                 chronic_condition_data = {key: summary[key] for key in CHRONIC_CONDITION_KEYS if summary[key] > 0}
                                 sorted_chronic_condition_data = sort_data(chronic_condition_data)
-                                chronic_condition_chart = create_bar_chart(sorted_chronic_condition_data, 'Adult withChronic Condition COunt', 'Chronic Condition', 'Count')
+                                chronic_condition_chart = create_bar_chart(sorted_chronic_condition_data, 'Adult withChronic Condition COunt', 'Chronic Condition', 'Adults Count')
                                 chronic_condition_chart = update_plot_layout(chronic_condition_chart, list(range(len(CHRONIC_CONDITION_KEYS))), sorted_chronic_condition_data)
                                 col2.plotly_chart(chronic_condition_chart, use_container_width=True)
                         else:
