@@ -4,7 +4,7 @@ from predefined_lists_dicts import *
 from excel import create_and_download_excel
 from data_processing import process_data
 from datetime import datetime
-from data_loading import DataLoading
+from data_loading import DataLoading,clear_session_state
 from template_mapping import *
 from handle_tabs import *
 from streamlit_extras.metric_cards import style_metric_cards
@@ -24,8 +24,6 @@ st.set_page_config(page_title="Point in Time", page_icon=":house:", layout="wide
 current_time = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
 
 def main():
-    initialize_session_state()
-
     # Setup layout and header
     setup_header()
 
@@ -38,6 +36,8 @@ def main():
         region, mapping = select_region_and_mapping()
 
         upload_dict = DataLoading.load_and_display_data()
+
+        initialize_session_state()
 
         for pop_name, df in upload_dict.items():
             df.dropna(subset='Timestamp', inplace=True)
@@ -247,16 +247,7 @@ def main():
                 file_name=f'{region}_PIT_Count_{current_time}.xlsx',
                 mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
             ):
-                st.cache_data.clear()
-                # Reset the session state variables
-                st.session_state.uploaded_data = {}
-                st.session_state.dfs_dict = {}
-                st.session_state.dfs_dict_vet = {}
-                st.session_state.dfs_dict_youth = {}
-                st.session_state.dfs_dict_sub = {}
-                st.session_state.dfs_dict_sum = {}
-                # Remove the excel_file from session state
-                del st.session_state.excel_file
+                clear_session_state()
 
 
 if __name__ == "__main__":

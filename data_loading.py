@@ -65,6 +65,7 @@ class DataLoading:
             # Submit button for the form
             submitted = st.form_submit_button("Submit")
             if submitted:
+                clear_session_state()
                 if uploaded_file_es is not None:
                     upload_dict['Sheltered_ES'] = uploaded_file_es
                     st.success("Sheltered_ES data loaded successfully!")
@@ -81,3 +82,11 @@ class DataLoading:
                     st.error("No data loaded. Please upload at least one file.")
 
         return upload_dict
+    
+def clear_session_state():
+    """
+    Resets the relevant session state variables, and clear cache.
+    """
+    st.cache_data.clear()
+    for key in list(st.session_state.keys()):
+        del st.session_state[key]
