@@ -1,16 +1,16 @@
 import streamlit as st
 import pandas as pd
+from datetime import datetime
+from streamlit_extras.metric_cards import style_metric_cards
+
 from predefined_lists_dicts import *
 from excel import create_and_download_excel
 from data_processing import process_data
-from datetime import datetime
-from data_loading import DataLoading,clear_session_state
+from data_loading import DataLoading, clear_session_state
 from template_mapping import *
 from handle_tabs import *
-from streamlit_extras.metric_cards import style_metric_cards
 from dash import *
 from calculate_stats import calculate_summary_stats
-
 
 # Suppress warnings and set display options
 import warnings
