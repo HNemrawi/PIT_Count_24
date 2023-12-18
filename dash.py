@@ -89,3 +89,17 @@ def update_plot_layout(fig, tickvals, ticktext, bottom_margin=100, figure_width=
     )
     return fig
 
+@st.cache_data
+def get_merged_df(processed_dfs):
+    return pd.concat(processed_dfs, ignore_index=True)
+
+@st.cache_data
+def filter_dataframe(df, locations, households, CH, Vet, Youth):
+    filtered_df = df[(df['source'].isin(locations)) & (df['household_type'].isin(households))]
+    if CH == "Yes":
+        filtered_df = filtered_df[filtered_df['CH'] == 'Yes']
+    if Vet == "Yes":
+        filtered_df = filtered_df[filtered_df['vet'] == 'Yes']
+    if Youth == "Yes":
+        filtered_df = filtered_df[filtered_df['youth'] == 'Yes']
+    return filtered_df

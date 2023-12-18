@@ -86,7 +86,11 @@ def setup_footer():
 
 def select_region_and_mapping():
     """Select a region and get the corresponding mapping."""
-    region = st.selectbox('Select an Implementation', ['New England', 'Wisconsin'], index=0)
-    mapping = WI_mapping if region == 'Wisconsin' else NE_mapping
+    region = st.selectbox('Select an Implementation', ['', 'New England', 'Wisconsin'], index=0)
+    if region:
+        mapping = WI_mapping if region == 'Wisconsin' else NE_mapping
+    else:
+        mapping = None
     return region, mapping
+
 
