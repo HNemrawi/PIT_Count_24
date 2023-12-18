@@ -25,7 +25,7 @@ class DataLoading:
         if uploaded_file.name.endswith('.csv'):
             return pd.read_csv(uploaded_file)
         elif uploaded_file.name.endswith('.xlsx'):
-            return pd.read_excel(uploaded_file, sheet_name=sheet_name) if sheet_name else pd.read_excel(uploaded_file)
+            return pd.read_excel(uploaded_file, sheet_name=sheet_name)
             
     @staticmethod
     def handle_file_upload(text):
@@ -42,8 +42,14 @@ class DataLoading:
         if uploaded_file:
             sheet_name = None
             if uploaded_file.name.endswith('.xlsx'):
-                xls = pd.ExcelFile(uploaded_file)
-                sheet_name = st.selectbox("Choose the sheet", xls.sheet_names)
+                try:
+                    xls = pd.ExcelFile(uploaded_file)
+                    sheet_names = xls.sheet_names
+                    selectbox_key = f"sheet_select_{text}"  # Unique key for each selectbox
+                    sheet_name = st.selectbox("Choose the sheet", sheet_names, key=selectbox_key)
+                except Exception as e:
+                    st.error(f"Error reading Excel file: {e}")
+                    return None
             return DataLoading.load_dataframe(uploaded_file, sheet_name)
 
     @staticmethod

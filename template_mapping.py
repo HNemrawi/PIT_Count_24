@@ -772,7 +772,7 @@ mapping_Summary = [
     (("History of Homelessness", "Length of Time Homeless(One year or more)"), 'History_One_Year_or_More'),
 
     (("History of Homelessness (HHs)", "First Time Homeless"), 'History_HHs_First_Time_Homeless'),
-    (("History of Homelessness (HHs)", "Length of Time Homeless(Less than one month"), 'History_HHs_Less_than_One_Month'),
+    (("History of Homelessness (HHs)", "Length of Time Homeless(Less than one month)"), 'History_HHs_Less_than_One_Month'),
     (("History of Homelessness (HHs)", "Length of Time Homeless(One to three months)"), 'History_HHs_One_to_Three_Months'),
     (("History of Homelessness (HHs)", "Length of Time Homeless(Three months to one year)"), 'History_HHs_Three_Months_to_One_Year'),
     (("History of Homelessness (HHs)", "Length of Time Homeless(One year or more)"), 'History_HHs_One_Year_or_More')
