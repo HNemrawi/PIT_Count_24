@@ -1,8 +1,10 @@
 import streamlit as st
 import pandas as pd
+import hashlib
 from datetime import datetime
 from streamlit_extras.metric_cards import style_metric_cards
 
+# Import your modules
 from predefined_lists_dicts import *
 from excel import create_and_download_excel
 from data_processing import process_data
@@ -211,49 +213,73 @@ def handle_download(region, current_time):
     else:
         st.warning("No data available. Please upload data..")
 
+# Function to hash a password
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
+
+# Function to check if the username/password combination is correct
+def check_credentials(username, password):
+    # Fetch users and hashed passwords from Streamlit secrets
+    users = st.secrets["users"]
+    hashed_input_password = hash_password(password)
+    return users.get(username) == hashed_input_password
 
 def main():
-    # Setup layout and header
-    setup_header()
+    # Authentication check
+    if 'logged_in' not in st.session_state or not st.session_state['logged_in']:
+        with st.form("login_form"):
+            username = st.text_input("Username")
+            password = st.text_input("Password", type="password")
+            submit_button = st.form_submit_button("Login")
 
-    region, mapping = select_region_and_mapping()
+            if submit_button:
+                if check_credentials(username, password):
+                    st.session_state['logged_in'] = True
+                else:
+                    st.error("Incorrect username or password")
 
-    if region:
-        tab_titles = ["UPLOAD", "HDX_Totals", "HDX_Veterans", "HDX_Youth", "HDX_Subpopulations", "PIT Summary", "Dashboard", "DOWNLOAD"]
-        tabs = st.tabs(tab_titles)
-        tabs_dict = {title: tab for title, tab in zip(tab_titles, tabs)}
+    # Main app content
+    if 'logged_in' in st.session_state and st.session_state['logged_in']:
+        setup_header()
 
-        with tabs_dict['UPLOAD']:
-            upload_dict = DataLoading.load_and_display_data()
-            initialize_session_state()
+        region, mapping = select_region_and_mapping()
 
-            for pop_name, df in upload_dict.items():
-                df.dropna(subset=['Timestamp'], inplace=True)
-                st.info(pop_name)
-                st.dataframe(df)
-                df, Household_with_children, Household_without_children, Household_with_only_children = process_data(df, mapping)
-                st.session_state.uploaded_data[pop_name] = (df, Household_with_children, Household_without_children, Household_with_only_children)
+        if region:
+            tab_titles = ["UPLOAD", "HDX_Totals", "HDX_Veterans", "HDX_Youth", "HDX_Subpopulations", "PIT Summary", "Dashboard", "DOWNLOAD"]
+            tabs = st.tabs(tab_titles)
+            tabs_dict = {title: tab for title, tab in zip(tab_titles, tabs)}
 
-                df_copy = df.copy()
-                df_copy['Household_ID'] = df_copy['Household_ID'].astype(str) + '_' + pop_name
-                df_copy['source'] = pop_name
-                st.session_state.processed_dfs.append(df_copy)
+            with tabs_dict['UPLOAD']:
+                upload_dict = DataLoading.load_and_display_data()
+                initialize_session_state()
 
-                # Handle tabs for different household types
-                handle_tabs_for_households(tabs_dict, df, pop_name, Household_with_children, Household_without_children, Household_with_only_children)
+                for pop_name, df in upload_dict.items():
+                    df.dropna(subset=['Timestamp'], inplace=True)
+                    st.info(pop_name)
+                    st.dataframe(df)
+                    df, Household_with_children, Household_without_children, Household_with_only_children = process_data(df, mapping)
+                    st.session_state.uploaded_data[pop_name] = (df, Household_with_children, Household_without_children, Household_with_only_children)
 
-            setup_footer()
+                    df_copy = df.copy()
+                    df_copy['Household_ID'] = df_copy['Household_ID'].astype(str) + '_' + pop_name
+                    df_copy['source'] = pop_name
+                    st.session_state.processed_dfs.append(df_copy)
 
-            # Display processed data in each tab
-            display_processed_data(tabs_dict)
+                    # Handle tabs for different household types
+                    handle_tabs_for_households(tabs_dict, df, pop_name, Household_with_children, Household_without_children, Household_with_only_children)
 
-        with tabs_dict['Dashboard']:
-            display_dashboard()
+                setup_footer()
 
-        with tabs_dict['DOWNLOAD']:
-            handle_download(region, current_time)
-    else:
-        st.warning("Please select an Implementation to get started.")
+                # Display processed data in each tab
+                display_processed_data(tabs_dict)
+
+            with tabs_dict['Dashboard']:
+                display_dashboard()
+
+            with tabs_dict['DOWNLOAD']:
+                handle_download(region, current_time)
+        else:
+            st.warning("Please select an Implementation to get started.")
 
 
 if __name__ == "__main__":
