@@ -1,5 +1,7 @@
 import streamlit as st
 import pandas as pd
+import pytz
+from datetime import datetime
 from predefined_lists_dicts import *
 from data_processing import process_data
 from data_loading import DataLoading
@@ -84,13 +86,26 @@ def setup_footer():
     """Set up the footer of the Streamlit page."""
     st.markdown(HTML_FOOTER, unsafe_allow_html=True)
 
+def get_current_time(timezone):
+    return datetime.now(pytz.timezone(timezone)).strftime('%Y-%m-%d_%H-%M-%S')
+
 def select_region_and_mapping():
     """Select a region and get the corresponding mapping."""
     region = st.selectbox('Select an Implementation', ['', 'New England', 'Dashgreatlake'], index=0)
+    timezone = "UTC"  # Default timezone
+
+    if region == "New England":
+        timezone = "America/New_York"
+    elif region == "Dashgreatlake":
+        timezone = "America/Chicago"
+
+    current_time = get_current_time(timezone)
+    mapping = None
+
     if region:
         mapping = WI_mapping if region == 'Dashgreatlake' else NE_mapping
-    else:
-        mapping = None
-    return region, mapping
+
+    return region, mapping, current_time
+
 
 

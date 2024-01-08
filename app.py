@@ -1,10 +1,10 @@
 import streamlit as st
 import pandas as pd
 import hashlib
+import pytz
 from datetime import datetime
 from streamlit_extras.metric_cards import style_metric_cards
 
-# Import your modules
 from predefined_lists_dicts import *
 from excel import create_and_download_excel
 from data_processing import process_data
@@ -21,10 +21,7 @@ pd.set_option('display.max_columns', None)
 
 # Set page configuration
 st.set_page_config(page_title="Point in Time", page_icon=":house:", layout="wide")
-
-# Current time for file naming
-current_time = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-
+                                                          
 def handle_tabs_for_households(tabs_dict, df, pop_name, Household_with_children, Household_without_children, Household_with_only_children):
     # All Households
     handle_tab(tabs_dict['HDX_Totals'], Household_with_children, pop_name, None, 
@@ -242,7 +239,7 @@ def main():
     if 'logged_in' in st.session_state and st.session_state['logged_in']:
         setup_header()
 
-        region, mapping = select_region_and_mapping()
+        region, mapping , current_time = select_region_and_mapping()
 
         if region:
             tab_titles = ["UPLOAD", "HDX_Totals", "HDX_Veterans", "HDX_Youth", "HDX_Subpopulations", "PIT Summary", "Dashboard", "DOWNLOAD"]
