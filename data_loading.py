@@ -91,8 +91,12 @@ class DataLoading:
     
 def clear_session_state():
     """
-    Resets the relevant session state variables, and clear cache.
+    Resets the session state variables except for the login state, and clears cache.
     """
+    logged_in = st.session_state.get('logged_in', False)
     st.cache_data.clear()
     for key in list(st.session_state.keys()):
-        del st.session_state[key]
+        if key != 'logged_in':
+            del st.session_state[key]
+    st.session_state['logged_in'] = logged_in
+
