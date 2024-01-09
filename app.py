@@ -237,46 +237,45 @@ def main():
 
     # Main app content
     if 'logged_in' in st.session_state and st.session_state['logged_in']:
-        setup_header()
-
-        region, mapping , current_time = select_region_and_mapping()
-
-        if region:
             tab_titles = ["UPLOAD", "HDX_Totals", "HDX_Veterans", "HDX_Youth", "HDX_Subpopulations", "PIT Summary", "Dashboard", "DOWNLOAD"]
             tabs = st.tabs(tab_titles)
             tabs_dict = {title: tab for title, tab in zip(tab_titles, tabs)}
 
             with tabs_dict['UPLOAD']:
-                upload_dict = DataLoading.load_and_display_data()
-                initialize_session_state()
+                region, mapping, current_time = select_region_and_mapping()
+                if region:
+                    setup_header()
+                    upload_dict = DataLoading.load_and_display_data()
+                    initialize_session_state()
 
-                for pop_name, df in upload_dict.items():
-                    df.dropna(subset=['Timestamp'], inplace=True)
-                    st.info(pop_name)
-                    st.dataframe(df)
-                    df, Household_with_children, Household_without_children, Household_with_only_children = process_data(df, mapping)
-                    st.session_state.uploaded_data[pop_name] = (df, Household_with_children, Household_without_children, Household_with_only_children)
+                    for pop_name, df in upload_dict.items():
+                        df.dropna(subset=['Timestamp'], inplace=True)
+                        st.info(pop_name)
+                        st.dataframe(df)
+                        df, Household_with_children, Household_without_children, Household_with_only_children = process_data(df, mapping)
+                        st.session_state.uploaded_data[pop_name] = (df, Household_with_children, Household_without_children, Household_with_only_children)
 
-                    df_copy = df.copy()
-                    df_copy['Household_ID'] = df_copy['Household_ID'].astype(str) + '_' + pop_name
-                    df_copy['source'] = pop_name
-                    st.session_state.processed_dfs.append(df_copy)
+                        df_copy = df.copy()
+                        df_copy['Household_ID'] = df_copy['Household_ID'].astype(str) + '_' + pop_name
+                        df_copy['source'] = pop_name
+                        st.session_state.processed_dfs.append(df_copy)
 
-                    # Handle tabs for different household types
-                    handle_tabs_for_households(tabs_dict, df, pop_name, Household_with_children, Household_without_children, Household_with_only_children)
+                        # Handle tabs for different household types
+                        handle_tabs_for_households(tabs_dict, df, pop_name, Household_with_children, Household_without_children, Household_with_only_children)
 
-                setup_footer()
+                    setup_footer()
 
-                # Display processed data in each tab
-                display_processed_data(tabs_dict)
+                    # Display processed data in each tab
+                    display_processed_data(tabs_dict)
+                else:
+                    st.warning("Please select an Implementation to get started.")
 
-            with tabs_dict['Dashboard']:
-                display_dashboard()
+                if region:
+                    with tabs_dict['Dashboard']:
+                        display_dashboard()
 
-            with tabs_dict['DOWNLOAD']:
-                handle_download(region, current_time)
-        else:
-            st.warning("Please select an Implementation to get started.")
+                    with tabs_dict['DOWNLOAD']:
+                        handle_download(region, current_time)
 
 
 if __name__ == "__main__":
