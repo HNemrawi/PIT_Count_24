@@ -276,6 +276,8 @@ def main():
 
                     with tabs_dict['DOWNLOAD']:
                         handle_download(region, current_time)
+                        st.markdown("[HMIS and Non-HMIS Combiner](https://combinepit.streamlit.app/)")
+
 
 
 if __name__ == "__main__":
