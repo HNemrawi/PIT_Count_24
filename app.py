@@ -277,6 +277,9 @@ def main():
                     with tabs_dict['DOWNLOAD']:
                         handle_download(region, current_time)
                         st.markdown("[HMIS and Non-HMIS Combiner](https://combinepit.streamlit.app/)")
+                        if region == "New England":
+                            st.markdown("[Breakdown by Project Name on HIC](https://hic-project.streamlit.app/)")
+
 
 
 
