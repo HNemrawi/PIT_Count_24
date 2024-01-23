@@ -17,8 +17,8 @@ NE_mapping = {
     'Specific length of time literally homeless:' : 'specific_homeless_long',
     'Specific length of time literally homeless this time' : 'specific_homeless_long_this_time',
     #household
-    'Is/was anyone in your household staying with you tonight/last night (Wednesday night)?': 'has_company',
-    'Which of the following describes the household that is/was with you on Wednesday night?': 'household',
+    # 'Is/was anyone in your household staying with you tonight/last night (Wednesday night)?': 'has_company',
+    # 'Which of the following describes the household that is/was with you on Wednesday night?': 'household',
     #adult_2
     'Adult/Parent #2: Gender': 'adult_2_Gender',
     'Adult/Parent #2: Race/Ethnicity': 'adult_2_Race/Ethnicity',
@@ -94,8 +94,8 @@ WI_mapping = {
     'Specific length of time homeless' : 'specific_homeless_long',
     'Specific length of time homeless this time' : 'specific_homeless_long_this_time',
     #household
-    'Is (was) anyone from your current family household staying with you tonight (on Wednesday night)?': 'has_company',
-    'Which of the following describes the family household that is/was with you on Wednesday night?': 'household',
+    # 'Is (was) anyone from your current family household staying with you tonight (on Wednesday night)?': 'has_company',
+    # 'Which of the following describes the family household that is/was with you on Wednesday night?': 'household',
     #adult_2
     'Adult/Parent #2: Gender': 'adult_2_Gender',
     'Adult/Parent #2: Race/Ethnicity': 'adult_2_Race/Ethnicity',
