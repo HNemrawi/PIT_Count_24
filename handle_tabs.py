@@ -56,8 +56,8 @@ def process_and_display(dfs_dict, tab):
         for stats_name, stats_data in dfs_dict.items():
             calculate_total(stats_data)  # Calculate the 'Total' column
             st.info(f'{stats_name}:')
-            st.dataframe(stats_data)
-
+            st.dataframe(stats_data, width=1120, height=500)
+    
 def initialize_session_state():
     default_values = {
         'uploaded_data': {},
