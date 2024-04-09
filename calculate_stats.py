@@ -34,7 +34,7 @@ def calculate_demographic_info(df, unique_households_df):
     return {
         'Total number of veterans':df[df['vet'] == 'Yes'].shape[0],
         'CH_Total_number_of_households': df[df['CH'] == 'Yes']['Household_ID'].nunique(),
-        'CH_Total_number_of_persons': len(df[df['CH'] == 'Yes']),
+        'CH_Total_number_of_persons': df[df['CH'] == 'Yes'].drop_duplicates(subset='Household_ID')['total_person_in_household'].sum(),
         **{f'Adults_with_a_{condition_categories[condition]}': df[(df['chronic_condition'].str.contains(condition, na=False, regex=False)) & (df['age_group'].isin(['adult', 'youth']))].shape[0] for condition in condition_categories},
         **{f'childs_with_a_{condition_categories[condition]}': df[(df['chronic_condition'].str.contains(condition, na=False, regex=False)) & (df['age_group'].isin(['child', 'unknown']))].shape[0] for condition in condition_categories},
         'Victims_of_Domestic_Violence_(fleeing)' : df[df['DV'] == 'Yes'].shape[0],

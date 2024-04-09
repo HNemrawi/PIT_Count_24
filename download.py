@@ -1,3 +1,6 @@
+import pandas as pd
+import streamlit as st
+from helpers import clear_session_state
 from io import BytesIO
 import pandas as pd
 from openpyxl.styles import NamedStyle, Font, Alignment, PatternFill
@@ -57,3 +60,29 @@ def create_and_download_excel(tabs_data_dict):
         excel_file.seek(0)
 
     return excel_file
+
+
+def handle_download(region, current_time):
+    tabs_data_dict = {
+        'HDX_TOTAL': st.session_state.dfs_dict,
+        'HDX_Veterans': st.session_state.dfs_dict_vet,
+        'HDX_Youth': st.session_state.dfs_dict_youth,
+        'HDX_Subpopulations': st.session_state.dfs_dict_sub,
+        'PIT Summary': st.session_state.dfs_dict_sum
+    }
+
+    # Check if any tab data dictionary is not empty
+    data_available = any(dfs for dfs in tabs_data_dict.values() if dfs)
+
+    if data_available:
+        st.session_state.excel_file = create_and_download_excel(tabs_data_dict)
+
+        if st.download_button(
+            'Download Excel file',
+            st.session_state.excel_file,
+            file_name=f'{region}_PIT_Count_{current_time}.xlsx',
+            mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        ):
+            clear_session_state()
+    else:
+        st.warning("No data available. Please upload data..")

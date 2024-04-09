@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+from helpers import clear_session_state
 
 class DataLoading:
     """
@@ -88,15 +89,5 @@ class DataLoading:
                     st.error("No data loaded. Please upload at least one file.")
 
         return upload_dict
-    
-def clear_session_state():
-    """
-    Resets the session state variables except for the login state, and clears cache.
-    """
-    logged_in = st.session_state.get('logged_in', False)
-    st.cache_data.clear()
-    for key in list(st.session_state.keys()):
-        if key != 'logged_in':
-            del st.session_state[key]
-    st.session_state['logged_in'] = logged_in
+
 
