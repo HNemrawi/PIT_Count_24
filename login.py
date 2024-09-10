@@ -21,6 +21,6 @@ def authenticate_user():
         if submit_button and username and password:
             if check_credentials(username, password):
                 st.session_state['logged_in'] = True  # Update session state to reflect successful login
-                st.experimental_rerun()  # Rerun the app to reflect the updated session state immediately
+                st.rerun()  # Rerun the app to reflect the updated session state immediately
             else:
                 st.error("Login failed. Please check your username and password.")
